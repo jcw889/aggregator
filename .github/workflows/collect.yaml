@@ -3,7 +3,7 @@ on:
   # executed once a week on Sundays at 00:00
   schedule:
     - cron: "0 07 * * *"
-  workflow_dispatch:  
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.repository }}
