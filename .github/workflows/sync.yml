@@ -2,10 +2,10 @@ name: Sync from upstream
 
 on:
   schedule:
-    - cron: '0 0 */3 * *'  # 每3天执行一次，凌晨00:00
-  workflow_dispatch:         # 允许手动触发
+    - cron: '0 0 */3 * *'  # 每3天0点执行一次
+  workflow_dispatch:     # 人工手动触发
 
-jobs:  
+jobs:
   sync:
     runs-on: ubuntu-latest
 
@@ -13,12 +13,11 @@ jobs: 
     - name: Checkout your repository
       uses: actions/checkout@v3
       with:
-        # fetch all branches and tags
         fetch-depth: 0
 
     - name: Add upstream remote
       run: |
-        git remote add upstream https://github.com/wzdnzd/aggregator.git  
+        git remote add upstream https://github.com/wzdnzd/aggregator.git
         git fetch upstream
 
     - name: Merge upstream changes
@@ -28,7 +27,6 @@ jobs: 
 
     - name: Push changes
       env:
-        # 需要设置GITHUB_TOKEN权限，用下面默认的token即可
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git push origin main
