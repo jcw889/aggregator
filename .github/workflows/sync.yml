@@ -1,0 +1,27 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '0 0 */3 * *'  # 每 3 天运行一次
+  workflow_dispatch:        # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Sync upstream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git remote add upstream https://github.com/wzdnzd/aggregator.git
+          git fetch upstream
+          git checkout main
+          git reset --hard upstream/main  # 强制重置为上游分支，覆盖本地历史
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
+          git push origin main --force     # 强制推送，覆盖远程历史
