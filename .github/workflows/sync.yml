@@ -3,8 +3,9 @@ name: Sync from upstream
 on:
   schedule:
     - cron: '0 0 */3 * *'  # 每3天执行一次，凌晨00:00
+  workflow_dispatch:         # 允许手动触发
 
-jobs:
+jobs:  
   sync:
     runs-on: ubuntu-latest
 
@@ -17,7 +18,7 @@ jobs:
 
     - name: Add upstream remote
       run: |
-        git remote add upstream https://github.com/wzdnzd/aggregator.git
+        git remote add upstream https://github.com/wzdnzd/aggregator.git  
         git fetch upstream
 
     - name: Merge upstream changes
